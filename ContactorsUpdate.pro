@@ -6,6 +6,8 @@
 
 QT       += core
 
+QT += sql
+
 QT       -= gui
 
 TARGET = ContactorsUpdate
@@ -16,7 +18,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    ChinesePinyinTable.cpp
+    ChinesePinyinTable.cpp \
+    DatabaseTable.cpp \
+    CContactorsTable.cpp
 
 HEADERS += \
-    ChinesePinyinTable.h
+    ChinesePinyinTable.h \
+    DatabaseTable.h \
+    CContatorsTable.h

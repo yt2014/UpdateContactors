@@ -1,54 +1,73 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include <QDebug>
+#include <QSql>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QString>
+#include <QList>
+#include <QVariant>
+#include <QDebug>
+#include "CContatorsTable.h"
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    qDebug()<<"aaaa test\n";
+    qDebug()<<"begin update...\n";
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC","Dail");
+    db.setDatabaseName("DRIVER={Microsoft Access Driver (*.mdb)};FIL={MS Access};DBQ=dail.mdb");
+    db.setPassword("yt_2015_sdh");
 
     QSqlDatabase db1 = QSqlDatabase::database("Dail",true);
 
      if(db1.isValid()&&db1.isOpen())
      {
-         QString strQuery = "select * from verification where hdnumber like \'%" + strDiskInfo.trimmed() +"%\'";
+         QString strQuery = "select * from contactors where pinyin is null or ShortPinyin is null";
+                            //"select * from contactors where pinyin = '' or ShortPinyin = ''";
 
          QSqlQuery query(db1);
 
          query.exec(strQuery);
 
+         QSqlRecord columns = query.record();
 
+         int index_Name = columns.indexOf("name");
+         int index_telenum = columns.indexOf("telenumber");
 
-         int countOfRecord = 0;
+         QString name;
+         QString telenum;
+         ContactorInfo infoToAdd;
+
+        CContactorsTable * m_ContactorTable = new CContactorsTable();
+
          while(query.next())
          {
-             countOfRecord = countOfRecord+1;
+             name = query.value(index_Name).toString();
+             telenum = query.value(index_telenum).toString();
+             infoToAdd.name = name;
+             infoToAdd.telenum = telenum;
+             m_ContactorTable->InsertPinyinForRecord(infoToAdd);
+             qDebug()<<name<<" "<<telenum<<"\n";
          }
-         if(countOfRecord>0)
+         qDebug()<<"all updated\n";
+         delete m_ContactorTable;
+         if(db1.isOpen())
          {
-           // MainWindow w;
-           // w.show();
-           // file.close();
-
-            return a.exec();
+             db1.close();
          }
-         else
-         {
-             //QMessageBox::information(NULL,"NO","认证不通过");
-             qDebug()<<"verificating not passed\n";
-         }
-
-         db1.close();
          //file.close();
-         return 0;
+         //return 0;
      }
      else
      {
          //QMessageBox::information(NULL,"NO","数据库文件丢失");
          //file.close();
-         return 0;
+         qDebug()<<"can't find database file\n";
+
      }
 
 
-    //return a.exec();
+    return a.exec();
 }
