@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    qDebug()<<"aaaa test";
+    qDebug()<<"aaaa test\n";
 
     QSqlDatabase db1 = QSqlDatabase::database("Dail",true);
 
@@ -26,18 +26,20 @@ int main(int argc, char *argv[])
          }
          if(countOfRecord>0)
          {
-            MainWindow w;
-            w.show();
-            file.close();
+           // MainWindow w;
+           // w.show();
+           // file.close();
+
             return a.exec();
          }
          else
          {
-             QMessageBox::information(NULL,"NO","认证不通过");
+             //QMessageBox::information(NULL,"NO","认证不通过");
+             qDebug()<<"verificating not passed\n";
          }
 
          db1.close();
-         file.close();
+         //file.close();
          return 0;
      }
      else
@@ -48,5 +50,5 @@ int main(int argc, char *argv[])
      }
 
 
-    return a.exec();
+    //return a.exec();
 }
