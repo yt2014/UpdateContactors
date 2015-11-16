@@ -1,0 +1,20 @@
+#ignore the database file.
+*.mdb
+
+#ignore .uer file.
+
+*.user
+
+#ignore .user related file.
+
+*.user.*
+
+#ignore .autosave files
+
+*.autosave
+
+#ignore .swp
+
+*.swp
+
+*~
